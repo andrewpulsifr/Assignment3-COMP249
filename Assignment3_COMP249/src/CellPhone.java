@@ -2,13 +2,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CellPhone implements Cloneable {
-	private static long serialNumCtr=0;
 	private long serialNumber;
 	private String brand;
 	private int year;
 	private double price;
 	
-	public CellPhone(long serialNumber, String brand, int year, double price) {
+	public CellPhone(long serialNumber, String brand, double price,int year) {
 		this.serialNumber=serialNumber;
 		this.brand=brand;
 		this.year=year;
@@ -78,6 +77,7 @@ public class CellPhone implements Cloneable {
 			}
 			catch(InputMismatchException e) {
 				System.out.println("Invalid input please try again");
+				sc.nextLine();
 			}
 		}
 		//

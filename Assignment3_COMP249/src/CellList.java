@@ -1,6 +1,9 @@
-import java.util.NoSuchElementException;
+import ExceptionClasses.NoSuchElementException;
 
 public class CellList implements Cloneable{
+	/**
+     * Private inner class representing a node in the linked list.
+     */
 	private class CellNode {
 		
         private CellPhone phone;
@@ -19,7 +22,6 @@ public class CellList implements Cloneable{
 	        }
 	        
 	        public CellNode(CellNode x) {
-	        	
 	        	this.phone = x.phone.clone();
 				this.next = x.next;
 	        }
@@ -52,6 +54,7 @@ public class CellList implements Cloneable{
     }
 	private CellNode head;
 	private int size;
+	private int iteration;
 	
 	public CellList(){
 		this.setHead(null);
@@ -67,6 +70,7 @@ public class CellList implements Cloneable{
 		{
 			head= null;
 			CellNode t1, t2 ,t3;
+			CellPhone c;
 			
 			t1=x.head;
 			t2=t3=null;
@@ -74,13 +78,38 @@ public class CellList implements Cloneable{
 			while(t1!= null) {
 				
 				if(head==null) {
-					t2= new CellNode(t1.phone.clone(),null);//points to clone of first node 
-					head=t2;//head points to first node
+					while(true) {
+						
+						c= t1.phone.clone();
+						
+						if(!this.contains(c.getSerialNumber())) {
+							t2= new CellNode(c,null);//points to clone of first node 
+							head=t2;//head points to first node
+							size++;
+							break;
+						}
+						System.out.println("-----------------------------------------------------------");
+						System.out.println("You have input a duplicate serial number. Please try again.");
+						System.out.println("-----------------------------------------------------------");
+					}
 				}
 				else{
-					t3= new CellNode(t1.phone.clone(),null);
-					t2.next=t3;
-					t2=t3;
+					while(true) {
+						
+						c= t1.phone.clone();
+						
+						if(!this.contains(c.getSerialNumber())) {
+							t3= new CellNode(c,null);
+							t2.next=t3;
+							t2=t3;
+							size++;
+							break;
+						}
+						
+						System.out.println("-----------------------------------------------------------");
+						System.out.println("You have input a duplicate serial number. Please try again.");
+						System.out.println("-----------------------------------------------------------");
+					}
 				}
 			t1=t1.next;
 			}
@@ -106,17 +135,24 @@ public class CellList implements Cloneable{
 	
 	public void addToStart(CellPhone phone) {
 		head = new CellNode(phone,head);
+		size++;
 	}
 	
-	public void addToEnd(CellPhone phone) {
-		CellNode t = head;
-		
-		while(t.next!=null) {
-			t=t.next;
+	public void addToEnd(CellPhone phone)
+	{
+		if(head == null)
+		{
+			head = new CellNode(phone, null);
+			size++;
+			return;
 		}
 		
-		t.next= new CellNode(phone,null);
-		t=null;
+		CellNode t = head;
+		while(t.next != null)
+			t = t.next;
+		
+		t.next = new CellNode(phone, null);	
+
 		size++;
 	}
 	
@@ -127,11 +163,16 @@ public class CellList implements Cloneable{
 		if(index<0) {
 			throw new NoSuchElementException();
 		}
+		if(index==0) {
+			head= new CellNode(phone,head);
+			size++;
+			return;
+		}
 		
-		for(int c=0;c<index || t.next!=null; c++) {
+		for(int c=0;c<index-1 && t!=null; c++) {
 			t=t.next;
 		}
-		if(t.next==null)
+		if(t==null)
 			throw new NoSuchElementException();
 		
 		t.next= new CellNode(phone,t.next);
@@ -143,18 +184,28 @@ public void deleteFromIndex(int index) throws NoSuchElementException{
 		
 		CellNode t=head;
 		
+		if(head == null)
+		{
+			throw new NoSuchElementException();
+		}
+		
+		if(index==0) {
+			head= head.next;
+			size--;
+			return;
+		}
+		
 		if(index<0) {
 			throw new NoSuchElementException();
 		}
 		
-		for(int c=0;c<index || t.next!=null; c++) {
+		for(int c=0;c<index -1 && t.next!=null; c++) {
 			t=t.next;
 		}
 		if(t.next==null)
 			throw new NoSuchElementException();
 		
 		t.next= t.next.next;
-		t=null;
 		size--;
 	}
 
@@ -162,71 +213,91 @@ public void deleteFromStart(CellPhone phone, int index) throws NoSuchElementExce
 	if(head!=null) {
 		head=head.next;
 		size--;
+		return;
 	}
+	
+	throw new NoSuchElementException();
+	
 }
 
 
-public void replaceAtIndex(CellNode Node, int index) throws NoSuchElementException{
+public void replaceAtIndex(CellPhone phone, int index) throws NoSuchElementException{
 	
 	CellNode t=head;
 	
 	if(index<0) {
 		throw new NoSuchElementException();
 	}
+	if(index==0) {
+		head= new CellNode(phone,head.next);
+		return;
+	}
 	
-	for(int c=0;c<index || t.next!=null; c++) {
+	for(int c=0;c<index-1 && t!=null; c++) {
 		t=t.next;
 	}
-	if(t.next==null)
+	if(t==null)
 		throw new NoSuchElementException();
-	Node.setNext(t.next);
-	t.next= Node;
+	
+	t.next= new CellNode(phone,t.next.next);
 	t=null;
+
+	
 }
 
 //privacy breach to account for with the pointer to the node 
-public CellNode find(long serial) throws NoSuchElementException{
+public CellNode find(long serial) {
 	
 	CellNode t=head;
 	
-	while(serial!=t.phone.getSerialNumber() || t.next!=null) {
+	for(int c=0;t!=null; c++) {
+		if(t.phone.getSerialNumber() == serial) {
+			iteration=c;
+			return t;
+		}
 		t=t.next;
 	}
-	if(t.next==null)
-		return null;
-	else
-		return t;
+
+	return null;
 	
 }
 
 public boolean contains(long serial){
 	
-	CellNode t=head;
-	
-	while(serial!=t.phone.getSerialNumber() || t.next!=null) {
-		t=t.next;
-	}
-	if(t.next==null)
+	if(find(serial) != null)
+		return true;
+	else 
 		return false;
-	
-	return true;
 	
 }
 
 public void showContents() {
+	System.out.println("\n---------------------------------------------------------------");
+	System.out.println("---------------------------------------------------");
+	System.out.println("Displaying link list contents...");
+	System.out.println("---------------------------------------------------");
+	System.out.println("---------------------------------------------------------------\n");
+	
+	System.out.println("The current size of the list is "+size);
+	System.out.println("===============================================================");
 	
 	CellNode t=head;
 	
-	for(int c=0; t.next!=null;c++) {
-		if(c%3==0)
-			System.out.println();
-		
-		System.out.print(t.phone.toString()+" --->");
-		t=t.next;
-		
+	if (t == null)
+		System.out.println("\nThere is nothing to display; list is empty." );
+	else {
+		for(int c=0; t!=null;c++) {
+			if(c%3==0)
+				System.out.println();
+			
+			System.out.print(t.phone.toString()+" --->");
+			t=t.next;
+			
+		}
+		System.out.println("X");
 	}
-	System.out.println("X");
-		t=null;
+	System.out.println("\n===============================================================");
+	t=null;
 }
 
 public boolean equals(Object x) {
@@ -242,7 +313,7 @@ public boolean equals(Object x) {
 	CellNode t=head;
 	CellNode t1=c.head;
 	
-	while(t.next!=null) {
+	while(t!=null) {
 		if(!t.phone.equals(t1.phone)) {
 			return false;
 		}
@@ -250,10 +321,18 @@ public boolean equals(Object x) {
 		t1=t1.next;
 		
 	}
-	if(t1.next==null)
+	if(t1==null)
 		return true;
 	
 	return false;
+}
+
+public int getIteration() {
+	return iteration;
+}
+
+public void setIteration(int iteration) {
+	this.iteration = iteration;
 }
 
 
