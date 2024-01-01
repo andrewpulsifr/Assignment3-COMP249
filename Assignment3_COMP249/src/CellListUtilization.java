@@ -1,10 +1,22 @@
+// -----------------------------------------------------
+// Assignment 3
+// Question: III
+// Written by: Andrew Pulsifer (40234525)
+// ---------------------------------
+
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-
-
+/**
+ * Andrew Pulsifer (40234525)
+ * COMP249
+ * Assignment 3 
+ * Due Date: December 4th 2023
+ * 
+ * A utility class demonstrating the utilization of the {@link CellList} and {@link CellPhone} classes.
+ */
 public class CellListUtilization {
 
 	public static void main(String[] args) {
@@ -72,7 +84,7 @@ public class CellListUtilization {
 				System.out.println("It took "+c1.getIteration()+" iterations to find pointer ====> "+c1.find(SNinput));
 				
 		}
-
+		
 		CellList c3 = new CellList(c1);
 		
 		System.out.println("\n---------------------------------------------------------------");
@@ -136,7 +148,6 @@ public class CellListUtilization {
 		
 		//input at index implementation
 		CellPhone c;
-		Scanner userIn = new Scanner(System.in);
 		
 		while(true) {
 			
@@ -148,7 +159,8 @@ public class CellListUtilization {
 					+ "\nExactly As shown with each input seperated by a comma");
 			System.out.println("---------------------------------------------------");
 			
-			String UserInput = userIn.nextLine();
+			input.nextLine();
+			String UserInput = input.nextLine();
 			String [] fields = UserInput.split(",");
 			
 			c = new CellPhone(Long.parseLong(fields[0]),fields[1],Double.parseDouble(fields[2]),Integer.parseInt(fields[3]));
@@ -170,8 +182,8 @@ public class CellListUtilization {
 			try {
 			System.out.println("---------------------------------------------------");
 			System.out.println("Please input index at which you would like to insert new cellphone : ");
-			c1.insertAtIndex(c, userIn.nextInt());
-			userIn.nextLine();
+			c1.insertAtIndex(c, input.nextInt());
+			input.nextLine();
 			
 			c1.showContents();
 			break;
@@ -186,14 +198,9 @@ public class CellListUtilization {
 			try {
 			System.out.println("---------------------------------------------------");
 			System.out.print("Please input index at which you would like to delete node : ");
-			c1.deleteFromIndex(userIn.nextInt());
-			userIn.nextLine();
-			
-			System.out.println("---------------------------------------------------------------");
-			System.out.println("---------------------------------------------------");
-			System.out.println("Displaying new linked list");
-			System.out.println("---------------------------------------------------");
-			System.out.println("---------------------------------------------------------------");
+			c1.deleteFromIndex(input.nextInt());
+			input.nextLine();
+		
 			c1.showContents();
 			break;
 	
@@ -213,7 +220,7 @@ public class CellListUtilization {
 					+ "\nExactly As shown with each input seperated by a comma");
 			System.out.println("---------------------------------------------------");
 			
-			String UserInput = userIn.nextLine();
+			String UserInput = input.nextLine();
 			String [] fields = UserInput.split(",");
 			
 			c = new CellPhone(Long.parseLong(fields[0]),fields[1],Double.parseDouble(fields[2]),Integer.parseInt(fields[3]));
@@ -235,8 +242,8 @@ public class CellListUtilization {
 			try {
 			System.out.println("---------------------------------------------------");
 			System.out.println("Please input index at which you would like to replace the cellphone : ");
-			c1.replaceAtIndex(c, userIn.nextInt());
-			userIn.nextLine();
+			c1.replaceAtIndex(c, input.nextInt());
+			input.nextLine();
 			
 			c1.showContents();
 			break;
@@ -246,6 +253,28 @@ public class CellListUtilization {
 				}
 		}
 		
+		System.out.println("\n---------------------------------------------------------------");
+		System.out.println("---------------------------------------------------");
+		System.out.println("Testing Deep clone method for CellNode...");
+		System.out.println("---------------------------------------------------");
+		System.out.println("---------------------------------------------------------------\n");
+		
+		CellList c5 = new CellList();
+		
+		c5.testCellNodeClone(c1);
+		c5.showContents();
+		
+		
+		System.out.println("\n---------------------------------------------------------------");
+		System.out.println("---------------------------------------------------");
+		System.out.println("Closing program...");
+		System.out.println("---------------------------------------------------");
+		System.out.println("---------------------------------------------------------------\n");
+		
+		input.close();
+
 	}
+	
+	
 
 }

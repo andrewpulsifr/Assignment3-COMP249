@@ -1,12 +1,41 @@
+// -----------------------------------------------------
+// Assignment 3
+// Question: III
+// Written by: Andrew Pulsifer (40234525)
+// ---------------------------------
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Andrew Pulsifer (40234525)
+ * COMP249
+ * Assignment 3 
+ * Due Date: December 4th 2023
+ * 
+ * The {@code CellPhone} class represents a mobile phone with a serial number, brand, year of release, and price.
+ * It implements the {@code Cloneable} interface to support cloning with a new serial number.
+ */
 public class CellPhone implements Cloneable {
 	private long serialNumber;
 	private String brand;
 	private int year;
 	private double price;
 	
+	 /**
+	 * Privacy leak for the entire class due to the ability to add cellphones 
+	 * and change/read their contents without restriction 
+	 * This could be resolved by implementing barriers such as requiring a password 
+	 * to add/edit/get information from CellPhone 
+	 * This being said it is only a problem if access is granted through CellNode
+	 * 
+     * Constructs a new {@code CellPhone} object with the specified attributes.
+     *
+     * @param serialNumber Unique identifier for the cell phone.
+     * @param brand        Brand of the cell phone.
+     * @param price        Price of the cell phone.
+     * @param year         Year of release.
+     */
 	public CellPhone(long serialNumber, String brand, double price,int year) {
 		this.serialNumber=serialNumber;
 		this.brand=brand;
@@ -15,6 +44,12 @@ public class CellPhone implements Cloneable {
 
 	}
 	
+	/**
+     * Constructs a new {@code CellPhone} object based on an existing one with a new serial number.
+     *
+     * @param x          The original cell phone object.
+     * @param serialNum  New serial number for the cloned cell phone.
+     */
 	public CellPhone(CellPhone x, long serialNum) {
 		this.serialNumber=serialNum;
 		this.brand=x.brand;
@@ -22,13 +57,31 @@ public class CellPhone implements Cloneable {
 		this.price=x.price;
 	}
 	
-	//getter and setters
+	 // Getter and setter methods...
+
+    /**
+     * Gets the serial number of the cell phone.
+     *
+     * @return The serial number.
+     */
 	public long getSerialNumber() {
 		return serialNumber;
 	}
+	
+	/**
+     * Sets the serial number of the cell phone.
+     *
+     * @param serialNumber The new serial number.
+     */
 	public void setSerialNumber(long serialNumber) {
 		this.serialNumber = serialNumber;
 	}
+	
+	/**
+     * Returns a string representation of the {@code CellPhone} object.
+     *
+     * @return A string representation.
+     */
 	public String getBrand() {
 		return brand;
 	}
@@ -48,9 +101,20 @@ public class CellPhone implements Cloneable {
 		this.price = price;
 	}
 	
+	 /**
+     * Returns a string representation of the {@code CellPhone} object.
+     *
+     * @return A string representation.
+     */
 	public String toString() {
 		return "["+serialNumber+"; "+brand+" "+price+" "+year+"]";
 		}
+	 /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param x The object to compare with.
+     * @return {@code true} if the objects are equal, {@code false} otherwise.
+     */
 	public boolean equals(Object x) {
 		if(x==null || this.getClass()!=x.getClass())
 			return false;
@@ -63,6 +127,11 @@ public class CellPhone implements Cloneable {
 	}
 	
 	//could cause a privacy leak— look on interfaces to double check
+	/**
+	 * Creates and returns a copy of this {@code CellPhone} object with a new serial number.
+	 *
+	 * @return A cloned {@code CellPhone} object with a new serial number.
+	 */
 	public CellPhone clone() {
 		CellPhone c =null;
 		Scanner sc= new Scanner(System.in);
@@ -84,7 +153,6 @@ public class CellPhone implements Cloneable {
 		try {
 		c= (CellPhone)super.clone();
 		c.serialNumber=serialNum;
-		
 		return c;
 		}
 		catch(CloneNotSupportedException e)
@@ -93,5 +161,7 @@ public class CellPhone implements Cloneable {
 			return null; // needed for the compiler!
 		}
 		
+		
 	}
+
 }
